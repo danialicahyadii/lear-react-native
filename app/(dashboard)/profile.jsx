@@ -7,11 +7,12 @@ import { useUser } from "../../hooks/useUser";
 import ThemedButton from "../../components/ThemedButton";
 
 const Profile = () => {
-  const { logout } = useUser();
+  const { logout, user } = useUser();
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText title={true} style={styles.heading}>
-        Your email
+        {user.user.email}
       </ThemedText>
       <Spacer />
 
@@ -20,7 +21,7 @@ const Profile = () => {
       </ThemedText>
       <Spacer />
 
-      <ThemedButton>
+      <ThemedButton onPress={logout}>
         <Text style={{ color: "#f2f2f2" }}>Logout</Text>
       </ThemedButton>
     </ThemedView>
