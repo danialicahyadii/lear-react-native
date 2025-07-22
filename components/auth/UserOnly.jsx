@@ -6,8 +6,6 @@ import { useEffect } from 'react';
 const UserOnly = ({children}) => {
     const { user, authChecked } = useUser();
     const router = useRouter();
-    console.log(user);
-    
 
     useEffect(() => {
         if (authChecked && user === null){

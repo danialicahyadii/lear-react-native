@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const UserContext = createContext();
 
@@ -17,6 +18,7 @@ export function UserProvider({ children }) {
           password: password,
         }
       );
+      await AsyncStorage.setItem('access_token', response.data.access_token);
       setToken(response.data.access_token);
       setUser(response.data);
     } catch (error) {
@@ -37,7 +39,7 @@ export function UserProvider({ children }) {
         }
       );
 
-      console.log("Logout berhasil:", response);
+      console.log(response.data.message);
 
       // Kosongkan state user/token
       setUser(null);
@@ -48,14 +50,15 @@ export function UserProvider({ children }) {
   }
 
   async function getInitialUserValue(){
+    
     try {
+      const authToken = await AsyncStorage.getItem('access_token');
+      console.log(authToken);
       const response = await axios.get('https://stock-opname.devkftd.my.id/api/user', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
-      console.log(response.data);
-      
       setUser(response);
     } catch (error) {
       setUser(null)
@@ -69,7 +72,7 @@ export function UserProvider({ children }) {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, login, register, logout, token, authChecked }}>
+    <UserContext.Provider value={{ user, login, register, logout, authChecked }}>
       {children}
     </UserContext.Provider>
   );
