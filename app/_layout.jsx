@@ -8,7 +8,6 @@ import { useUser } from "../hooks/useUser";
 const RootLayout = () => {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme] ?? Colors.light;
-  
   return (
     <UserProvider>
       <StatusBar value="auto" />

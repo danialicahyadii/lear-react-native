@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import ThemedView from "../../components/ThemedView";
 import ThemedText from "../../components/ThemedText";
 import Spacer from "../../components/Spacer";
@@ -11,10 +10,21 @@ const Profile = () => {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.heading}>
-        {user.user.email}
-      </ThemedText>
-      <Spacer />
+      <ThemedView style={styles.container2}>
+        <ThemedText title={true} style={styles.heading}>
+          Username : {user.username}
+        </ThemedText>
+        <ThemedText title={true} style={styles.heading}>
+          Email          : {user.email}
+        </ThemedText>
+        <ThemedText title={true} style={styles.heading}>
+          Name          : {user.name}
+        </ThemedText>
+         <ThemedText title={true} style={styles.heading}>
+          Position     : {user.position}
+        </ThemedText>
+      </ThemedView>
+      <Spacer/>
 
       <ThemedText style={styles.heading}>
         Time to start reading some books ...
@@ -36,9 +46,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  container2: {
+    alignItems: "left",
+    justifyContent: "left",
+  },
   heading: {
     fontWeight: "bold",
     fontSize: 18,
-    textAlign: "center",
+    textAlign: "left",
+    justifyContent: "left"
   },
 });

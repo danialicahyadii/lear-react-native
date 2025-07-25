@@ -1,14 +1,15 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from "expo-router";
 
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
-
+  const router = useRouter();
+  
   async function login(email, password) {
     try {
       const response = await axios.post(
@@ -19,51 +20,45 @@ export function UserProvider({ children }) {
         }
       );
       await AsyncStorage.setItem('access_token', response.data.access_token);
-      setToken(response.data.access_token);
-      setUser(response.data);
+      setUser(response.data.user);
+      router.replace('/books');
     } catch (error) {
       throw Error(error);
     }
   }
-  async function register(email, password) {}
   async function logout() {
     try {
-      const response = await axios.post(
+      const authToken = await AsyncStorage.getItem('access_token');
+      await axios.post(
         "https://stock-opname.devkftd.my.id/api/logout-sanctum",
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
             Accept: "application/json",
           },
         }
       );
-
-      console.log(response.data.message);
-
-      // Kosongkan state user/token
       setUser(null);
-      setToken(null);
+      await AsyncStorage.removeItem('access_token');
     } catch (error) {
       console.error("Logout gagal:", error || error.message);
     }
   }
-
   async function getInitialUserValue(){
-    
     try {
       const authToken = await AsyncStorage.getItem('access_token');
-      console.log(authToken);
       const response = await axios.get('https://stock-opname.devkftd.my.id/api/user', {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      setUser(response);
+      setUser(response.data);
     } catch (error) {
       setUser(null)
-    } finally{
+    } finally {
       setAuthChecked(true)
+      
     }
   }
 
@@ -72,7 +67,7 @@ export function UserProvider({ children }) {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, login, register, logout, authChecked }}>
+    <UserContext.Provider value={{ user, login, logout, authChecked }}>
       {children}
     </UserContext.Provider>
   );

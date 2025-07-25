@@ -4,17 +4,17 @@ import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import ThemedLoader from '../ThemedLoader';
 
-const UserOnly = ({children}) => {
+const GuestOnly = ({children}) => {
     const { user, authChecked } = useUser();
     const router = useRouter();
 
     useEffect(() => {
-        if (authChecked && user === null){
-            router.replace('/login');
+        if (authChecked && user !== null){
+            router.replace('/books');
         }
     }, [user, authChecked])
 
-    if (!authChecked || !user){
+    if (!authChecked || user){
         return (
             <ThemedLoader/>
         )
@@ -22,4 +22,4 @@ const UserOnly = ({children}) => {
     return children;
 }
 
-export default UserOnly
+export default GuestOnly
