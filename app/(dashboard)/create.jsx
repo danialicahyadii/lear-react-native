@@ -26,10 +26,19 @@ const Create = () => {
 
   const { createBook } = useBooks();
   const router = useRouter();
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title.trim() || !author.trim() || !description.trim()) return;
 
     setLoading(true);
+
+    await createBook({title, author, description});
+
+    setTitle('')
+    setAuthor('')
+    setDescription('')
+
+    router.replace('/books');
+    setLoading(false);
   };
 
   return (

@@ -26,7 +26,7 @@ const DashboardLayout = () => {
             <Tabs.Screen
               name="books"
               options={{
-                title: "Books",
+                title: "Home",
                 tabBarIcon: ({ focused }) => (
                   <Ionicons
                     size={24}
@@ -61,6 +61,10 @@ const DashboardLayout = () => {
                   />
                 ),
               }}
+            />
+            <Tabs.Screen 
+              name="books/[id]"
+              options={{href: null}}
             />
           </Tabs>
         </UserOnly>
